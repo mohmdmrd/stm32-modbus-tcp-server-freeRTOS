@@ -21,9 +21,12 @@ A lightweight and efficient **Modbus TCP Server** library for **STM32H7 microcon
 - Set MEM_SIZE to 10*1024 Byte
 - Enable Ethernet interrupt and set priority to last number (in this exmple 15)
 - if use cortex m7 must configuration MPU unit. do it like exmaple. 0x30000000 is Ethernet rx and tx dma buffer and 0x30004000 is LWIP_RAM_HEAP_POINTER
-- if use MPU and use another SRAM (like example) must add add address section in STM32xx_FLASH.id
+- if use MPU and use another SRAM (like example) must add address section in STM32xx_FLASH.id
 - before MX_LWIP_Inut(); always use delay for prevent some bugs.(in exmaple uses 1s delay in main function)
 - dont use osdelay.
 - in FreeRTOSConfig.h delete "#define configASSERT( x ) if ((x) == 0) {taskDISABLE_INTERRUPTS(); for( ;; );}" and write this "#define configASSERT( x ) if ((x) == 0) {}" for prevet some error.
 - insert tcpserver_modbus.h and tcpserver_modbus.c in your project
 - at the end initial tcpserver modbus in main file (like exmaple)
+## Recommended Modbus TCP client Master testing tools for windows
+-ModbusHD: https://github.com/hadiscada/modbushd
+-Modbus Poll: https://www.modbustools.com/download.html
