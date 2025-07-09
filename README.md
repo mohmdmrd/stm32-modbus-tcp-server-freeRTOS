@@ -28,5 +28,5 @@ A lightweight and efficient **Modbus TCP Server** library for **STM32H7 microcon
 - insert tcpserver_modbus.h and tcpserver_modbus.c in your project
 - at the end initial tcpserver modbus in main file (like exmaple)
 ## Recommended Modbus TCP client Master testing tools for windows
--ModbusHD: https://github.com/hadiscada/modbushd
--Modbus Poll: https://www.modbustools.com/download.html
+- ModbusHD: https://github.com/hadiscada/modbushd
+- Modbus Poll: https://www.modbustools.com/download.html
