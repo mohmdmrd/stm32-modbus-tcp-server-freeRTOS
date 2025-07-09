@@ -23,9 +23,8 @@ typedef struct
 
     uint16_t *u16reg;     /*!< memory buffer */
     uint16_t u16regsize;  //buffer size
-    uint16_t u16Port;
-    uint8_t  u8slaveID;
-    uint16_t Timeout;
+    uint16_t u16Port;    //port for communication
+    uint8_t  u8slaveID;  //modbus slave id
 }
 modbus_t;
 
@@ -42,11 +41,6 @@ typedef enum ERR_OP_LIST
     // Errors
 	ERR_Illegal_Function =1,
 	ERR_Illegal_Data_Address =2,
-//	ERR_Illegal_Data_Value =3,
-//	ERR_Slave_Device_Failure =4,
-	ERR_Slave_Device_Busy	 =6,
-//	ERR_Memory_Parity_Error =8,
-	ERR_WRONG_ANWSER=16,//slave send invalid answer
 }ERR_OP_LIST_t;
 void tcpserver_init (modbus_t* usermodbus);
 

@@ -113,7 +113,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
   myModbus.u16Port=502;//port Address
   myModbus.u8slaveID=0x01;//slave Address for modbus
-  myModbus.Timeout=1000;//timeout
   myModbus.u16reg=ModbusData;//buffer register
   myModbus.u16regsize= sizeof(ModbusData)/sizeof(ModbusData[0]);//get buffer size
 
@@ -279,7 +278,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    HAL_Delay(100);
+    HAL_Delay(1);
   }
   /* USER CODE END 5 */
 }

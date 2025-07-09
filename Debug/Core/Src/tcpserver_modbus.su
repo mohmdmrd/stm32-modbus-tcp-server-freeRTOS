@@ -1,9 +1,8 @@
-../Core/Src/tcpserver_modbus.c:32:13:tcp_thread	24	static
+../Core/Src/tcpserver_modbus.c:34:13:tcp_thread	24	static
 ../Core/Src/tcpserver_modbus.c:89:13:modbus_parse	32	static
-../Core/Src/tcpserver_modbus.c:127:6:tcpserver_init	64	static
-../Core/Src/tcpserver_modbus.c:140:13:copyString	32	static
-../Core/Src/tcpserver_modbus.c:148:13:readInputRegs	16	static
-../Core/Src/tcpserver_modbus.c:174:13:eror_handler	16	static
-../Core/Src/tcpserver_modbus.c:184:13:writeInputReg	16	static
-../Core/Src/tcpserver_modbus.c:197:13:writeInputMultiRegs	24	static
-../Core/Src/tcpserver_modbus.c:224:6:processing_task	16	static
+../Core/Src/tcpserver_modbus.c:124:6:tcpserver_init	24	static
+../Core/Src/tcpserver_modbus.c:131:13:copyString	32	static
+../Core/Src/tcpserver_modbus.c:140:13:readInputRegs	16	static
+../Core/Src/tcpserver_modbus.c:167:13:eror_handler	16	static
+../Core/Src/tcpserver_modbus.c:179:13:writeInputReg	16	static
+../Core/Src/tcpserver_modbus.c:194:13:writeInputMultiRegs	24	static

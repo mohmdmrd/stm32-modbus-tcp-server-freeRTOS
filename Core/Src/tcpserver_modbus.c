@@ -16,8 +16,6 @@ char msgc[100];
 char smsgc[100];
 modbus_t modbus;
 uint16_t length_send = 0;
-osThreadId_t processingTaskHandle;
-static sys_sem_t tcpsem;
 struct netconn *clientconn = NULL;
 ////////////////////////// Prototypes
 static void copyString(char* dest, char* src, unsigned num);
@@ -26,9 +24,13 @@ static void readInputRegs(void);
 static void eror_handler(uint8_t Exception_code);
 static void writeInputReg(void);
 static void writeInputMultiRegs(void);
-void processing_task(void *arg);
-//////////////////////////
 
+
+
+//////////////////////////Function
+
+
+//a task for init server and wait for massage
 static void tcp_thread(void *arg)
 {
 
@@ -60,13 +62,8 @@ static void tcp_thread(void *arg)
                         	memset (smsgc, '\0', sizeof(smsgc));  // clear the buffer
 
                             copyString(msgc, (char *)buf->p->payload, buf->p->len > sizeof(msgc) ? sizeof(msgc) : buf->p->len);
-                            osThreadFlagsSet(processingTaskHandle, 1);
-//                            modbus_parse(clientconn);
-                            u32_t wait = sys_arch_sem_wait(&tcpsem, modbus.Timeout);
-							if (wait >= modbus.Timeout) {
 
-								eror_handler(ERR_Slave_Device_Busy);
-							}
+                            modbus_parse(clientconn);
                         }
                         while (netbuf_next(buf) > 0);
 
@@ -86,6 +83,9 @@ static void tcp_thread(void *arg)
     }
 }
 
+
+
+//parse data from master(client)
 static void modbus_parse(struct netconn *client)
 {
     if (msgc[2] == 0 && msgc[3] == 0 && msgc[6] == modbus.u8slaveID)
@@ -116,26 +116,17 @@ static void modbus_parse(struct netconn *client)
         }
 
         netconn_write(client, smsgc, length_send, NETCONN_COPY);
-        modbus.u16reg[8]++;
-        if(modbus.u16reg[8]==0x00)
-        {
-        	modbus.u16reg[9]++;
-        }
     }
 }
 
+
+//make tcp task
 void tcpserver_init(modbus_t* usermodbus)
 {
     modbus = *usermodbus;
     sys_thread_new("tcp_thread", tcp_thread, NULL, DEFAULT_THREAD_STACKSIZE, osPriorityNormal);
-    const osThreadAttr_t procTaskAttr = {
-        .name = "processingTask",
-        .stack_size = 1024,
-        .priority = osPriorityAboveNormal
-    };
-    sys_sem_new(&tcpsem, 0);  // the semaphore would prevent simultaneous access to tcpsend
-    processingTaskHandle = osThreadNew(processing_task, NULL, &procTaskAttr);
 }
+
 
 static void copyString(char* dest, char* src, unsigned num)
 {
@@ -145,6 +136,7 @@ static void copyString(char* dest, char* src, unsigned num)
     }
 }
 
+//0x03 and 0x04 Function code
 static void readInputRegs()
 {
     uint16_t count = (msgc[10] << 8) + msgc[11];
@@ -171,6 +163,7 @@ static void readInputRegs()
     length_send = 9 + smsgc[8];
 }
 
+//error response
 static void eror_handler(uint8_t Exception_code)
 {
     smsgc[4] = 0;
@@ -181,6 +174,8 @@ static void eror_handler(uint8_t Exception_code)
     length_send = 9;
 }
 
+
+//0x06 Function code
 static void writeInputReg()
 {
     uint16_t start_address = (msgc[8] << 8) + msgc[9];
@@ -194,6 +189,8 @@ static void writeInputReg()
     length_send = 12;
 }
 
+
+//0x10 Function code
 static void writeInputMultiRegs()
 {
     uint16_t start_address = (msgc[8] << 8) + msgc[9];
@@ -221,13 +218,3 @@ static void writeInputMultiRegs()
 
     length_send = 12;
 }
-void processing_task(void *arg) {
-    for (;;) {
-        osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
-
-        modbus_parse(clientconn);
-
-        sys_sem_signal(&tcpsem);
-    }
-}
-
