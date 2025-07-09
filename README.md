@@ -14,7 +14,7 @@ A lightweight and efficient **Modbus TCP Server** library for **STM32H7 microcon
 - 🔌 Handles multiple simultaneous connections (configurable)
 - 📦 Lightweight memory footprint (suitable for embedded systems)
 
-How to use libary:
+## How to use libary
 - Enable Ethernet and set pins.
 - Enable freeRTOS
 - Enable LWIP and set a desire IP
